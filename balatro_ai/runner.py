@@ -602,6 +602,7 @@ def run_game(
     stake=None,
     continuation: Continuation | None = None,
     endless: bool = False,
+    control=None,
 ):
     deck, stake = resolve_settings(
         deck,
@@ -667,6 +668,9 @@ def run_game(
         trace.flush()
 
     def budget():
+        nonlocal deadline
+        if control is not None:
+            deadline += control.checkpoint()
         if time.monotonic() >= deadline:
             raise TimeoutError("game time limit reached")
 
@@ -913,6 +917,7 @@ def run_game(
                     result["coach_requests"] += 1
                     budget()
                     call_started = time.monotonic()
+                    generation = control.generation if control is not None else None
                     try:
                         response = coach.choose(
                             packet, min(limits.call_seconds, deadline - time.monotonic())
@@ -948,6 +953,11 @@ def run_game(
                                     ),
                                 )
                             )
+                budget()
+                if control is not None and generation != control.generation:
+                    record("coach_discarded", reason="paused or stopped during inference")
+                    state = settle(client, game_rpc(client, "gamestate", None, deadline), deadline)
+                    continue
                 plan_unchanged = isinstance(response, dict) and response.get("plan") == "="
                 if plan_unchanged:
                     response = dict(response, plan=plan)

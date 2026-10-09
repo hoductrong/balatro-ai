@@ -1,0 +1,1 @@
+{"id":"balatro_llm_local","name":"Balatro LLM Local bridge","author":["hoductrong"],"description":"Public-state adapter for the local Attol8 fork; bot profile 2 only.","prefix":"bll","main_file":"main.lua","priority":1000,"version":"1.0.0","dependencies":["balatrobot (>=1.5.1)","Steamodded (>=1.~)"]}

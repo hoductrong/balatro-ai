@@ -19,7 +19,9 @@ def main(argv=None):
     doctor.add_argument("--port", type=int, default=12346)
     play = sub.add_parser("play", help="start one real game (uses model calls)")
     play.add_argument("--output", type=Path, required=True)
-    play.add_argument("--coach", choices=["codex", "session"], default="codex")
+    play.add_argument("--coach", choices=["codex", "session", "local"], default="codex")
+    play.add_argument("--base-url", default="http://127.0.0.1:1234/v1")
+    play.add_argument("--template", choices=["auto", "chat", "qwen"], default="auto")
     play.add_argument("--model", default="gpt-6-astra", help="Codex model for the codex coach")
     play.add_argument("--port", type=int, default=12346)
     play.add_argument(
@@ -180,6 +182,10 @@ def main(argv=None):
 
         if args.coach == "codex":
             coach = CodexCoach() if args.model == "gpt-6-astra" else CodexCoach(model=args.model)
+        elif args.coach == "local":
+            from .local_coach import LocalCoach
+
+            coach = LocalCoach(args.model, base_url=args.base_url, template=args.template)
         else:
             coach = SessionCoach(args.output / "public")
         continuation, seed = None, args.seed

@@ -1,5 +1,9 @@
 # Balatro AI
 
+> **Local fork for this Mac:** Open **Balatro Local.app** → http://127.0.0.1:8876.
+> Uses Bionic/LM Studio models through the local dashboard. See [LOCAL.md](LOCAL.md).
+> Upstream results below used its cloud coach and are not local-model results.
+
 ### Black Deck. Gold Stake. Beaten by a bot.
 
 To our knowledge, **the first publicly documented bot to beat Balatro on Black

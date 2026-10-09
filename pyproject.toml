@@ -33,6 +33,7 @@ bench = ["matplotlib>=3.8"]
 
 [project.scripts]
 balatro = "balatro_ai.cli:main"
+balatro-local = "balatro_ai.local_ui:main"
 
 [tool.setuptools.packages.find]
 include = ["balatro_ai*"]
